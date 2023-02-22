@@ -1,13 +1,9 @@
 #include <iostream>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 int main(int, char **)
 {
-  video cassette;
-
-  // cassette.display();
-
   const int window_width
   { 800 };
 
@@ -15,8 +11,6 @@ int main(int, char **)
   { 800 };
 
   SDL_Init(SDL_INIT_EVERYTHING);
-
-  // SDL_Init(SDL _INIT_EVERYTHING);
 
   SDL_Window* window
   { nullptr };
@@ -28,7 +22,7 @@ int main(int, char **)
 
   SDL_RenderSetScale(renderer, 2, 2);
 
-  std::cout << "Hello World!" << std::endl;
+  std::cout << "SDL seems to work!" << std::endl;
 
   return 0;
 }
