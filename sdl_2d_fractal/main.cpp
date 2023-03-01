@@ -9,6 +9,33 @@ int main(int, char **)
 
   const int window_height
   { 800 };
+  
+  const float real_min
+  { -1.0f };
+  
+  const float real_max
+  { 1.0f };
+  
+  const float real_span
+  { real_max - real_min };
+  
+  const float real_delta
+  { real_span/float{ window_width }};
+  
+  const float imag_min
+  { -1.0f };
+  
+  const float imag_max
+  { 1.0f };
+  
+  const float imag_span
+  { imag_max - imag_min };
+  
+  const float imag_delta
+  { imag_span/float{ window_height }};
+  
+  
+  
 
   SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -20,7 +47,7 @@ int main(int, char **)
 
   SDL_CreateWindowAndRenderer(window_width, window_height, 0, &window, &renderer);
 
-  SDL_RenderSetScale(renderer, 2, 2);
+  SDL_RenderSetScale(renderer, 1, 1);
   
   bool looped
   { true };
@@ -53,9 +80,31 @@ int main(int, char **)
       }
     }
     
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     
-    SDL_RenderDrawPoint(renderer, 100, 100);
+    SDL_RenderClear(renderer);
+    
+    SDL_SetRenderDrawColor(renderer, 255, 127, 0, 255);
+    
+    for (int x{ 0 }; x <= 798; ++x)
+    {
+      for (int y{ 200 }; y <= 400; ++y)
+      {
+        SDL_RenderDrawPoint(renderer, x, y);
+      }
+    }
+    
+    for (int x{ 1 }; x <= 799; ++x)
+    {
+      for (int y{ 401 }; y <= 600; ++y)
+      {
+        SDL_RenderDrawPoint(renderer, x, y);
+      }
+    }
+    
+    
+    
+    SDL_RenderPresent(renderer);
   }
 
   std::cout << "SDL seems to work!" << std::endl;
