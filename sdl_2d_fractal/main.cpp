@@ -86,21 +86,23 @@ int main(int, char **)
     
     SDL_SetRenderDrawColor(renderer, 255, 127, 0, 255);
     
-    for (int x{ 0 }; x <= 798; ++x)
+    for (int x{ 0 }; x <= window_width; ++x)
     {
-      for (int y{ 200 }; y <= 400; ++y)
+      for (int y{ 0 }; y <= window_height; ++y)
       {
+        int red
+        { static_cast<int>(255.0f*static_cast<float>(x)/static_cast<float>(window_width))};
+        
+        int blue
+        { static_cast<int>(255.0f*static_cast<float>(y)/static_cast<float>(window_width))};
+        
+        SDL_SetRenderDrawColor(renderer, red, 127, blue, 255);
+        
         SDL_RenderDrawPoint(renderer, x, y);
       }
     }
     
-    for (int x{ 1 }; x <= 799; ++x)
-    {
-      for (int y{ 401 }; y <= 600; ++y)
-      {
-        SDL_RenderDrawPoint(renderer, x, y);
-      }
-    }
+   
     
     
     
