@@ -34,9 +34,6 @@ int main(int, char **)
   const float imag_delta
   { imag_span/float{ window_height }};
   
-  
-  
-
   SDL_Init(SDL_INIT_EVERYTHING);
 
   SDL_Window* window
@@ -45,7 +42,7 @@ int main(int, char **)
   SDL_Renderer* renderer
   { nullptr };
 
-  SDL_CreateWindowAndRenderer(window_width, window_height, 0, &window, &renderer);
+  SDL_CreateWindowAndRenderer(window_width + 1, window_height + 1, 0, &window, &renderer);
 
   SDL_RenderSetScale(renderer, 1, 1);
   
@@ -86,6 +83,8 @@ int main(int, char **)
     
     SDL_SetRenderDrawColor(renderer, 255, 127, 0, 255);
     
+    /*
+    
     for (int x{ 0 }; x <= window_width; ++x)
     {
       for (int y{ 0 }; y <= window_height; ++y)
@@ -101,8 +100,31 @@ int main(int, char **)
         SDL_RenderDrawPoint(renderer, x, y);
       }
     }
+     
+    */
     
-   
+    for (int x { 0 }; x <= window_width; ++x)
+    {
+      const float real
+      { real_min + static_cast<float>(x)*real_delta };
+      
+      const int red
+      { static_cast<int>(255.0f*real*real) };
+      
+      for (int y { 0 }; y <= window_height; ++y)
+      {
+        const float imag
+        { imag_max - static_cast<float>(y)*imag_delta };
+        
+        const int blue
+        { static_cast<int>(255.0f*imag*imag) };
+        
+        SDL_SetRenderDrawColor(renderer, red, 127, blue, 255);
+        
+        SDL_RenderDrawPoint(renderer, x, y);
+        
+      }
+    }
     
     
     
