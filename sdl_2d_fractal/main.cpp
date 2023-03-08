@@ -11,10 +11,10 @@ int main(int, char **)
   { 800 };
   
   const float real_min
-  { -1.0f };
+  { -2.0f };
   
   const float real_max
-  { 1.0f };
+  { 2.0f };
   
   const float real_span
   { real_max - real_min };
@@ -23,16 +23,25 @@ int main(int, char **)
   { real_span/float{ window_width }};
   
   const float imag_min
-  { -1.0f };
+  { -2.0f };
   
   const float imag_max
-  { 1.0f };
+  { 2.0f };
   
   const float imag_span
   { imag_max - imag_min };
   
   const float imag_delta
   { imag_span/float{ window_height }};
+  
+  const float f_delta_max
+  { 10.0f };
+  
+  const int iter_max
+  { 127 };
+  
+  const int mult
+  { 255 / iter_max };
   
   SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -83,43 +92,62 @@ int main(int, char **)
     
     SDL_SetRenderDrawColor(renderer, 255, 127, 0, 255);
     
-    /*
-    
-    for (int x{ 0 }; x <= window_width; ++x)
-    {
-      for (int y{ 0 }; y <= window_height; ++y)
-      {
-        int red
-        { static_cast<int>(255.0f*static_cast<float>(x)/static_cast<float>(window_width))};
-        
-        int blue
-        { static_cast<int>(255.0f*static_cast<float>(y)/static_cast<float>(window_width))};
-        
-        SDL_SetRenderDrawColor(renderer, red, 127, blue, 255);
-        
-        SDL_RenderDrawPoint(renderer, x, y);
-      }
-    }
-     
-    */
-    
     for (int x { 0 }; x <= window_width; ++x)
     {
       const float real
       { real_min + static_cast<float>(x)*real_delta };
-      
-      const int red
-      { static_cast<int>(255.0f*real*real) };
-      
+            
       for (int y { 0 }; y <= window_height; ++y)
       {
         const float imag
         { imag_max - static_cast<float>(y)*imag_delta };
         
-        const int blue
-        { static_cast<int>(255.0f*imag*imag) };
+        float f_real
+        { 0.0f };
         
-        SDL_SetRenderDrawColor(renderer, red, 127, blue, 255);
+        float f_imag
+        { 0.0f };
+        
+        float f_real_
+        { 0.0f };
+        
+        float f_imag_
+        { 0.0f };
+        
+        float f_delta_real
+        { 0.0f };
+        
+        float f_delta_imag
+        { 0.0f };
+        
+        float f_delta
+        { 0.0f };
+        
+        int iter
+        { 0 };
+        
+        while ((f_delta <= f_delta_max) && (iter < iter_max))
+        {        
+          f_real_ = f_real*f_real - f_imag*f_imag + real;
+          f_imag_ = 2.0f*f_real*f_imag + imag;
+          
+          f_delta_real = f_real_ - f_real;
+          f_delta_imag = f_imag_ - f_imag;
+          
+          f_delta = f_delta_real*f_delta_real + f_delta_imag*f_delta_imag;     
+          
+          f_real = f_real_;
+          f_imag = f_imag_;
+          
+          ++iter;     
+        }
+        
+        const int grey
+        { iter * mult};
+        
+        
+                        
+        SDL_SetRenderDrawColor(renderer, grey, 0, 0, 255);
         
         SDL_RenderDrawPoint(renderer, x, y);
         
