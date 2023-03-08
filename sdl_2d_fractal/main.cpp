@@ -2,6 +2,49 @@
 
 #include <SDL.h>
 
+void multiplex(const float f_real, const float f_imag,
+               float &f_real_, float &f_imag_)
+{
+  const float g_real
+  { f_real*f_real_ - f_imag*f_imag_ };
+  
+  const float g_imag
+  { f_imag*f_real_ + f_real*f_imag_ };
+  
+  f_real_ = g_real;
+  f_imag_ = g_imag;
+}
+
+void multiplex_p(const float f_real, const float f_imag,
+               float &f_real_, float &f_imag_,
+               const int power)
+{
+  if (power >= 1)
+  {
+    multiplex_p(f_real, f_imag, f_real_, f_imag_, power - 1);
+    
+    multiplex(f_real, f_imag, f_real_, f_imag_);
+  }
+}
+
+void mandel(const float real, const float imag,
+            const float f_real, const float f_imag,
+            float &f_real_, float &f_imag_)
+{
+  f_real_ = f_real*f_real - f_imag*f_imag + real;
+  f_imag_ = 2.0f*f_real*f_imag + imag;
+}
+
+void tester(const float real, const float imag,
+            const float f_real, const float f_imag,
+            float &f_real_, float &f_imag_)
+{
+  multiplex_p(f_real, f_imag, f_real_, f_imag_, 5);
+  
+  f_real_ += real;
+  f_imag_ += imag;
+}
+
 int main(int, char **)
 {
   const int window_width
@@ -11,10 +54,10 @@ int main(int, char **)
   { 800 };
   
   const float real_min
-  { -2.0f };
+  { -1.5f };
   
   const float real_max
-  { 2.0f };
+  { 1.5f };
   
   const float real_span
   { real_max - real_min };
@@ -23,10 +66,10 @@ int main(int, char **)
   { real_span/float{ window_width }};
   
   const float imag_min
-  { -2.0f };
+  { -1.5f };
   
   const float imag_max
-  { 2.0f };
+  { 1.5f };
   
   const float imag_span
   { imag_max - imag_min };
@@ -38,7 +81,7 @@ int main(int, char **)
   { 10.0f };
   
   const int iter_max
-  { 127 };
+  { 255 };
   
   const int mult
   { 255 / iter_max };
@@ -90,8 +133,6 @@ int main(int, char **)
     
     SDL_RenderClear(renderer);
     
-    SDL_SetRenderDrawColor(renderer, 255, 127, 0, 255);
-    
     for (int x { 0 }; x <= window_width; ++x)
     {
       const float real
@@ -128,8 +169,9 @@ int main(int, char **)
         
         while ((f_delta <= f_delta_max) && (iter < iter_max))
         {        
-          f_real_ = f_real*f_real - f_imag*f_imag + real;
-          f_imag_ = 2.0f*f_real*f_imag + imag;
+          tester(real, imag, f_real, f_imag, f_real_, f_imag_);
+          
+          // multiplex(real, imag, f_real_, f_imag_);
           
           f_delta_real = f_real_ - f_real;
           f_delta_imag = f_imag_ - f_imag;
