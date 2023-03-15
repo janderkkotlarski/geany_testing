@@ -45,6 +45,8 @@ void tester(const float real, const float imag,
   f_imag_ += imag;
 }
 
+
+
 int main(int, char **)
 {
   const int window_width
@@ -59,12 +61,19 @@ int main(int, char **)
   const float real_max
   { 1.5f };
   
-  const float real_span
-  { real_max - real_min };
+  const std::pair <float, float> complex_min 
+  { -1.5f, -1.5f };
   
-  const float real_delta
-  { real_span/float{ window_width }};
+  const std::pair <float, float> complex_max 
+  { 1.5f, 1.5f };
   
+  const std::pair <float, float> complex_span
+  { complex_max.first - complex_min.first, complex_max.second - complex_min.second };
+  
+  const std::pair <float, float> complex_delta
+  { complex_span.first/float{ window_width }, complex_span.second/float{ window_height } };
+  
+   
   const float imag_min
   { -1.5f };
   
@@ -136,7 +145,7 @@ int main(int, char **)
     for (int x { 0 }; x <= window_width; ++x)
     {
       const float real
-      { real_min + static_cast<float>(x)*real_delta };
+      { real_min + static_cast<float>(x)*complex_delta.first };
             
       for (int y { 0 }; y <= window_height; ++y)
       {
