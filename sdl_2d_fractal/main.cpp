@@ -55,11 +55,8 @@ int main(int, char **)
   const int window_height
   { 800 };
   
-  const float real_min
-  { -1.5f };
-  
-  const float real_max
-  { 1.5f };
+  std::pair <float, float> complex_now
+  { 0.0f, 0.0f };
   
   const std::pair <float, float> complex_min 
   { -1.5f, -1.5f };
@@ -71,22 +68,9 @@ int main(int, char **)
   { complex_max.first - complex_min.first, complex_max.second - complex_min.second };
   
   const std::pair <float, float> complex_delta
-  { complex_span.first/float{ window_width }, complex_span.second/float{ window_height } };
+  { complex_span.first/float{ window_width }, complex_span.second/float{ window_height } };  
   
-   
-  const float imag_min
-  { -1.5f };
-  
-  const float imag_max
-  { 1.5f };
-  
-  const float imag_span
-  { imag_max - imag_min };
-  
-  const float imag_delta
-  { imag_span/float{ window_height }};
-  
-  const float f_delta_max
+  const float delta_2_max
   { 10.0f };
   
   const int iter_max
@@ -108,8 +92,7 @@ int main(int, char **)
   SDL_RenderSetScale(renderer, 1, 1);
   
   bool looped
-  { true };
-  
+  { true }; 
   
   
   while (looped)
@@ -142,28 +125,22 @@ int main(int, char **)
     
     SDL_RenderClear(renderer);
     
+    
+    
     for (int x { 0 }; x <= window_width; ++x)
     {
-      const float real
-      { real_min + static_cast<float>(x)*complex_delta.first };
+      complex_now.first = complex_min.first + static_cast<float>(x)*complex_delta.first;
             
       for (int y { 0 }; y <= window_height; ++y)
       {
-        const float imag
-        { imag_max - static_cast<float>(y)*imag_delta };
+        complex_now.second = complex_max.second - static_cast<float>(y)*complex_delta.second;
         
-        float f_real
-        { 0.0f };
+        std::pair <float, float> complex_1st
+        { 0.0f, 0.0f };
         
-        float f_imag
-        { 0.0f };
-        
-        float f_real_
-        { 0.0f };
-        
-        float f_imag_
-        { 0.0f };
-        
+        std::pair <float, float> complex_2nd
+        { 0.0f, 0.0f };
+                
         float f_delta_real
         { 0.0f };
         
@@ -176,19 +153,21 @@ int main(int, char **)
         int iter
         { 0 };
         
-        while ((f_delta <= f_delta_max) && (iter < iter_max))
+        while ((f_delta <= delta_2_max) && (iter < iter_max))
         {        
-          tester(real, imag, f_real, f_imag, f_real_, f_imag_);
+          tester(complex_now.first, complex_now.second,
+                 complex_1st.first, complex_1st.first,
+                 complex_2nd.first, complex_2nd.second);
           
           // multiplex(real, imag, f_real_, f_imag_);
           
-          f_delta_real = f_real_ - f_real;
-          f_delta_imag = f_imag_ - f_imag;
+          f_delta_real = complex_2nd.first - complex_1st.first;
+          f_delta_imag = complex_2nd.second - complex_1st.second;
           
           f_delta = f_delta_real*f_delta_real + f_delta_imag*f_delta_imag;     
           
-          f_real = f_real_;
-          f_imag = f_imag_;
+          complex_1st.first = complex_2nd.first;
+          complex_1st.second = complex_2nd.second;
           
           ++iter;     
         }
