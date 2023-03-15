@@ -2,6 +2,9 @@
 
 #include <SDL.h>
 
+std::pair <float, float> complex_negate(const std::pair <float, float> &complex)
+{ return std::pair <float, float>{ -complex.first, -complex.second }; }
+
 void multiplex(const float f_real, const float f_imag,
                float &f_real_, float &f_imag_)
 {
@@ -140,6 +143,9 @@ int main(int, char **)
         
         std::pair <float, float> complex_2nd
         { 0.0f, 0.0f };
+        
+        std::pair <float, float> c_delta
+        { 0.0f, 0.0f };
                 
         float f_delta_real
         { 0.0f };
@@ -147,13 +153,13 @@ int main(int, char **)
         float f_delta_imag
         { 0.0f };
         
-        float f_delta
+        float c_delta_2
         { 0.0f };
         
         int iter
         { 0 };
         
-        while ((f_delta <= delta_2_max) && (iter < iter_max))
+        while ((c_delta_2 <= delta_2_max) && (iter < iter_max))
         {        
           tester(complex_now.first, complex_now.second,
                  complex_1st.first, complex_1st.first,
@@ -164,10 +170,13 @@ int main(int, char **)
           f_delta_real = complex_2nd.first - complex_1st.first;
           f_delta_imag = complex_2nd.second - complex_1st.second;
           
-          f_delta = f_delta_real*f_delta_real + f_delta_imag*f_delta_imag;     
+          // c_delta = complex_2nd - complex_1st;
           
-          complex_1st.first = complex_2nd.first;
-          complex_1st.second = complex_2nd.second;
+          
+          
+          c_delta_2 = f_delta_real*f_delta_real + f_delta_imag*f_delta_imag;     
+          
+          complex_1st = complex_2nd;
           
           ++iter;     
         }
