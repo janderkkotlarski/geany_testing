@@ -1,4 +1,5 @@
 #include "complexinates.h"
+#include "complexinates.cpp"
 
 #include <iostream>
 
@@ -44,6 +45,9 @@ int main(int, char **)
   
   bool looped
   { true }; 
+  
+  complexinates comp
+  { 127.0, 0.0, false };
   
   
   while (looped)
