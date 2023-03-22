@@ -22,7 +22,7 @@ class complexinates
   
   public:
   
-    complexinates(const double real, const double imag, const double polar);
+   
     
     void polar2carte();
 };
