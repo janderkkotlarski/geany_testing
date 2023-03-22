@@ -5,16 +5,16 @@ class complexinates
 {
   private:
   
-    float m_real
+    double m_real
     { 0.0f };
     
-    float m_imag
+    double m_imag
     { 0.0f };
     
-    float m_theta
+    double m_theta
     { 0.0f };
     
-    float m_phi
+    double m_phi
     { 0.0f };
     
     bool m_polar
@@ -22,7 +22,7 @@ class complexinates
   
   public:
   
-    complexinates(const float real, const float imag, const bool polar);
+    complexinates(const double real, const double imag, const double polar);
     
     void polar2carte();
 };

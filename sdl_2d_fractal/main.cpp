@@ -1,27 +1,27 @@
-// #include "complexinates.h"
+#include "complexinates.h"
 
 #include <iostream>
 
 #include <SDL.h>
 
-std::pair <float, float> complex_negate(const std::pair <float, float> &complex)
-{ return std::pair <float, float>{ -complex.first, -complex.second }; }
+std::pair <double, double> complex_negate(const std::pair <double, double> &complex)
+{ return std::pair <double, double>{ -complex.first, -complex.second }; }
 
-void multiplex(const float f_real, const float f_imag,
-               float &f_real_, float &f_imag_)
+void multiplex(const double f_real, const double f_imag,
+               double &f_real_, double &f_imag_)
 {
-  const float g_real
+  const double g_real
   { f_real*f_real_ - f_imag*f_imag_ };
   
-  const float g_imag
+  const double g_imag
   { f_imag*f_real_ + f_real*f_imag_ };
   
   f_real_ = g_real;
   f_imag_ = g_imag;
 }
 
-void multiplex_p(const float f_real, const float f_imag,
-               float &f_real_, float &f_imag_,
+void multiplex_p(const double f_real, const double f_imag,
+               double &f_real_, double &f_imag_,
                const int power)
 {
   if (power >= 1)
@@ -32,17 +32,17 @@ void multiplex_p(const float f_real, const float f_imag,
   }
 }
 
-void mandel(const float real, const float imag,
-            const float f_real, const float f_imag,
-            float &f_real_, float &f_imag_)
+void mandel(const double real, const double imag,
+            const double f_real, const double f_imag,
+            double &f_real_, double &f_imag_)
 {
   f_real_ = f_real*f_real - f_imag*f_imag + real;
   f_imag_ = 2.0f*f_real*f_imag + imag;
 }
 
-void tester(const float real, const float imag,
-            const float f_real, const float f_imag,
-            float &f_real_, float &f_imag_)
+void tester(const double real, const double imag,
+            const double f_real, const double f_imag,
+            double &f_real_, double &f_imag_)
 {
   multiplex_p(f_real, f_imag, f_real_, f_imag_, 5);
   
@@ -60,30 +60,24 @@ int main(int, char **)
   const int window_height
   { 800 };
   
-  std::pair <float, float> complex_now
+  std::pair <double, double> complex_now
   { 0.0f, 0.0f };
   
-  const std::pair <float, float> complex_min 
+  const std::pair <double, double> complex_min 
   { 0, 0 };
   
-  const std::pair <float, float> complex_max 
+  const std::pair <double, double> complex_max 
   { 255, 255 };
   
-  const std::pair <float, float> complex_span
+  const std::pair <double, double> complex_span
   { complex_max.first - complex_min.first, complex_max.second - complex_min.second };
   
-  const std::pair <float, float> complex_delta
-  { complex_span.first/float{ window_width }, complex_span.second/float{ window_height } };  
-  
-  const float delta_2_max
-  { 10.0f };
-  
+  const std::pair <double, double> complex_delta
+  { complex_span.first/double{ window_width }, complex_span.second/double{ window_height } };  
+     
   const int iter_max
-  { 255 };
-  
-  const int mult
-  { 255 / iter_max };
-  
+  { 255 };  
+    
   SDL_Init(SDL_INIT_EVERYTHING);
 
   SDL_Window* window
@@ -141,35 +135,17 @@ int main(int, char **)
     
     for (int x { 0 }; x <= window_width; ++x)
     {
-      complex_now.first = complex_min.first + static_cast<float>(x)*complex_delta.first;
+      complex_now.first = complex_min.first + static_cast<double>(x)*complex_delta.first;
       
       green = int{ complex_now.first };
             
       for (int y { 0 }; y <= window_height; ++y)
       {
-        complex_now.second = complex_max.second - static_cast<float>(y)*complex_delta.second;
+        complex_now.second = complex_max.second - static_cast<double>(y)*complex_delta.second;
         
         red = int{ complex_now.second  };
         
-        std::pair <float, float> complex_1st
-        { 0.0f, 0.0f };
-        
-        std::pair <float, float> complex_2nd
-        { 0.0f, 0.0f };
-        
-        std::pair <float, float> c_delta
-        { 0.0f, 0.0f };
-                
-        float f_delta_real
-        { 0.0f };
-        
-        float f_delta_imag
-        { 0.0f };
-        
-        float c_delta_2
-        { 0.0f };
-        
-        int iter
+               int iter
         { 0 };
         
         while (iter < iter_max)
@@ -178,33 +154,7 @@ int main(int, char **)
         }
         
         blue = iter;
-        /*
-        while ((c_delta_2 <= delta_2_max) && (iter < iter_max))
-        {        
-          tester(complex_now.first, complex_now.second,
-                 complex_1st.first, complex_1st.first,
-                 complex_2nd.first, complex_2nd.second);
-          
-          // multiplex(real, imag, f_real_, f_imag_);
-          
-          f_delta_real = complex_2nd.first - complex_1st.first;
-          f_delta_imag = complex_2nd.second - complex_1st.second;
-          
-          // c_delta = complex_2nd - complex_1st;
-          
-          
-          
-          c_delta_2 = f_delta_real*f_delta_real + f_delta_imag*f_delta_imag;     
-          
-          complex_1st = complex_2nd;
-          
-          ++iter;     
-        }
-        
-        const int grey
-        { iter * mult};
-        */        
-                        
+    
         SDL_SetRenderDrawColor(renderer, red, green, blue, 255);
         
         SDL_RenderDrawPoint(renderer, x, y);

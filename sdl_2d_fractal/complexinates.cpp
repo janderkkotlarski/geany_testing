@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-complexinates::complexinates(const float real, const float imag, const bool polar)
+complexinates::complexinates(const double real, const double imag, const bool polar)
 {
   if (polar)
   {
@@ -18,6 +18,6 @@ complexinates::complexinates(const float real, const float imag, const bool pola
 
 void complexinates::polar2carte()
 {
-  const float absol
+  const double absol
   { std::exp(m_theta) };
 }
