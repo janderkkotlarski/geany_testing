@@ -64,10 +64,10 @@ int main(int, char **)
   { 0.0f, 0.0f };
   
   const std::pair <float, float> complex_min 
-  { -1.5f, -1.5f };
+  { 0, 0 };
   
   const std::pair <float, float> complex_max 
-  { 1.5f, 1.5f };
+  { 255, 255 };
   
   const std::pair <float, float> complex_span
   { complex_max.first - complex_min.first, complex_max.second - complex_min.second };
@@ -130,15 +130,26 @@ int main(int, char **)
     
     SDL_RenderClear(renderer);
     
+    int red
+    { 0 };
     
+    int green
+    { 0 };
+    
+    int blue
+    { 63 };
     
     for (int x { 0 }; x <= window_width; ++x)
     {
       complex_now.first = complex_min.first + static_cast<float>(x)*complex_delta.first;
+      
+      green = int{ complex_now.first };
             
       for (int y { 0 }; y <= window_height; ++y)
       {
         complex_now.second = complex_max.second - static_cast<float>(y)*complex_delta.second;
+        
+        red = int{ complex_now.second  };
         
         std::pair <float, float> complex_1st
         { 0.0f, 0.0f };
@@ -161,6 +172,12 @@ int main(int, char **)
         int iter
         { 0 };
         
+        while (iter < iter_max)
+        {
+          ++iter;
+        }
+        
+        blue = iter;
         /*
         while ((c_delta_2 <= delta_2_max) && (iter < iter_max))
         {        
@@ -188,7 +205,7 @@ int main(int, char **)
         { iter * mult};
         */        
                         
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, red, green, blue, 255);
         
         SDL_RenderDrawPoint(renderer, x, y);
         
