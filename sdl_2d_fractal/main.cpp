@@ -161,6 +161,7 @@ int main(int, char **)
         int iter
         { 0 };
         
+        /*
         while ((c_delta_2 <= delta_2_max) && (iter < iter_max))
         {        
           tester(complex_now.first, complex_now.second,
@@ -185,10 +186,9 @@ int main(int, char **)
         
         const int grey
         { iter * mult};
-        
-        
+        */        
                         
-        SDL_SetRenderDrawColor(renderer, grey, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         
         SDL_RenderDrawPoint(renderer, x, y);
         
